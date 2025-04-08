@@ -78,7 +78,7 @@ smartagenda/
 
 **Fhilippe**  
 💼 [GitHub](https://github.com/fhilippe-gabriel)  
-📧 [seuemail@example.com](mailto:fhlippedev@gmail.com)
+📧 [fhilippedev@gmail.com](mailto:fhilippedev@gmail.com)
 
 ---
 
