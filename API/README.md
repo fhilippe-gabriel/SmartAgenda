@@ -22,7 +22,7 @@ SmartAgenda is a RESTful API for managing appointments, featuring Laravel Sanctu
 
 ```bash
 # Clone o repositório / Clone the repository
-git clone https://github.com/seu-usuario/smartagenda-api.git
+git clone https://github.com/fhilippe-gabriel/smartagenda-api.git
 cd smartagenda-api
 
 # Instale as dependências / Install dependencies
@@ -158,7 +158,7 @@ Este projeto está licenciado sob a [MIT license](https://opensource.org/license
 
 Desenvolvido por **Fhilippe**  
 📧 [fhilippedev@gmail.com](mailto:fhilippedev@gmail.com)  
-💼 [LinkedIn ou GitHub](https://github.com/fhilippe-gabriel)
+💼 [GitHub](https://github.com/fhilippe-gabriel)
 
 ---
 
