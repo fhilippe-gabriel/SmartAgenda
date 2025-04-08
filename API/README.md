@@ -63,83 +63,178 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT). -->
-<p align="center">
-  <a href="https://laravel.com" target="_blank">
-    <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
-  </a>
-</p>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-  <strong>SmartAgenda</strong><br>
-  <em>Modern Appointment Scheduling API with Laravel 12 + Sanctum</em><br>
-  <em>API moderna de agendamentos com Laravel 12 + Sanctum</em>
-</p>
+<h1 align="center">📅 SmartAgenda API</h1>
 
-<p align="center">
-  <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-  <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-  <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-  <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<p align="center">A powerful scheduling API built with Laravel 12 and Sanctum, featuring user authentication and secure appointment management.</p>
 
 ---
 
-## 📌 Sobre o Projeto | About the Project
+## 📌 Projeto / Project Overview
 
-**SmartAgenda** é uma API moderna para gerenciamento de agendamentos, construída com **Laravel 12** e autenticação via **Sanctum**. Cada agendamento é vinculado ao usuário logado, tornando o sistema ideal para uso multiusuário. A aplicação possui CRUD completo, autenticação com tokens e será integrada com um frontend em React.
+**PT-BR:**  
+SmartAgenda é uma API RESTful para gerenciamento de agendamentos, com autenticação via Laravel Sanctum, CRUD completo de compromissos e associação direta com usuários autenticados.
 
-SmartAgenda is a modern appointment scheduling API built with **Laravel 12** and **Sanctum** for authentication. Each appointment is linked to the authenticated user. The system supports full CRUD operations, token-based login, and will soon be paired with a React frontend.
-
----
-
-## 🧰 Tecnologias | Tech Stack
-
--   **Laravel 12**
--   **PHP 8.3**
--   **Sanctum Authentication**
--   **SQLite** for local development
--   **React** (frontend coming soon)
--   RESTful API structure
+**EN:**  
+SmartAgenda is a RESTful API for managing appointments, featuring Laravel Sanctum authentication, full CRUD operations, and user-specific data protection.
 
 ---
 
-## 🚀 Funcionalidades | Features
+## 🚀 Tecnologias / Technologies
 
-✅ Cadastro e login com token  
-✅ Autenticação via Sanctum  
-✅ Agendamentos vinculados ao usuário  
-✅ CRUD completo de agendamentos  
-✅ Proteção de rotas com middleware  
-✅ API JSON pronta para consumo no frontend
+- PHP 8.3+
+- Laravel 12.x
+- SQLite (local dev)
+- Laravel Sanctum (token-based auth)
+- API RESTful
 
 ---
 
-## ⚙️ Como usar | How to Use
+## ⚙️ Instalação / Installation
 
 ```bash
-# Clone o projeto
+# Clone o repositório / Clone the repository
 git clone https://github.com/seu-usuario/smartagenda-api.git
 cd smartagenda-api
 
-# Instale as dependências
+# Instale as dependências / Install dependencies
 composer install
 
-# Crie o arquivo de ambiente
+# Crie o arquivo de ambiente / Create .env file
 cp .env.example .env
 
-# Gere a chave da aplicação
+# Gere a chave da aplicação / Generate application key
 php artisan key:generate
 
-# Configure o SQLite
+# Configure o banco de dados SQLite / Setup SQLite
 touch database/database.sqlite
-# edite .env e ajuste:
+# Edite o .env e defina:
 # DB_CONNECTION=sqlite
-# DB_DATABASE=database/database.sqlite
+# DB_DATABASE=${caminho_completo}/database/database.sqlite
 
-# Rode as migrações
+# Execute as migrations / Run migrations
 php artisan migrate
 
-# Inicie o servidor local
+# Inicie o servidor de desenvolvimento / Start the dev server
 php artisan serve
 ```
+
+---
+
+## 🔐 Autenticação com Sanctum / Sanctum Authentication
+
+**Endpoints:**
+
+| Método | Rota           | Ação / Action         | Protegida? |
+|--------|----------------|------------------------|------------|
+| POST   | `/api/register` | Registro de usuário / User registration | ❌ |
+| POST   | `/api/login`    | Login e token / Login and token | ❌ |
+| GET    | `/api/me`       | Dados do usuário / Authenticated user info | ✅ |
+| POST   | `/api/logout`   | Logout / Revoke token | ✅ |
+
+Para acessar rotas protegidas, envie o token de autenticação no header:
+
+```
+Authorization: Bearer {token}
+```
+
+---
+
+## 📆 Endpoints de Agendamento / Appointment Endpoints
+
+**Todos os endpoints abaixo exigem autenticação.**  
+All endpoints below require authentication.
+
+| Método  | Rota                      | Ação / Action                |
+|---------|---------------------------|------------------------------|
+| GET     | `/api/appointments`       | Listar agendamentos do usuário |
+| POST    | `/api/appointments`       | Criar novo agendamento        |
+| GET     | `/api/appointments/{id}`  | Ver um agendamento específico |
+| PUT     | `/api/appointments/{id}`  | Atualizar agendamento         |
+| DELETE  | `/api/appointments/{id}`  | Remover agendamento           |
+
+---
+
+## 📦 Estrutura do Projeto / Project Structure
+
+```bash
+app/
+├── Models/
+│   └── Appointment.php     # Modelo de agendamento
+│   └── User.php            # Modelo de usuário com HasApiTokens
+├── Http/
+│   └── Controllers/
+│       └── AuthController.php         # Autenticação
+│       └── AppointmentController.php  # CRUD de agendamento
+database/
+└── migrations/             # Migrations
+routes/
+└── api.php                 # Rotas da API
+```
+
+---
+
+## 🧪 Testando com Postman / Testing with Postman
+
+1. Faça login com `/api/login`
+2. Copie o token e envie como `Authorization: Bearer {token}`
+3. Acesse as rotas protegidas (`/me`, `/appointments`, etc.)
+
+---
+
+## 📝 Exemplo de Registro (POST /api/register)
+
+```json
+{
+  "name": "Fhilippe",
+  "email": "fhilippe@email.com",
+  "password": "123456",
+  "password_confirmation": "123456"
+}
+```
+
+## 🔑 Exemplo de Login (POST /api/login)
+
+```json
+{
+  "email": "fhilippe@email.com",
+  "password": "123456"
+}
+```
+
+## ✅ Exemplo de Agendamento (POST /api/appointments)
+
+```json
+{
+  "title": "Live de programação",
+  "description": "Stream na Twitch sobre Laravel + React",
+  "scheduled_to": "2025-04-10 14:00:00"
+}
+```
+
+---
+
+## 🌍 Internacionalização / i18n
+
+Toda a documentação está disponível em **português e inglês** para facilitar a compreensão e aumentar a visibilidade internacional do projeto.
+
+---
+
+## 📜 Licença / License
+
+Este projeto está licenciado sob a [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+## 📣 Contato / Contact
+
+Desenvolvido por **Fhilippe**  
+📧 [Seu email ou link](mailto:seuemail@example.com)  
+💼 [LinkedIn ou GitHub](https://github.com/seu-usuario)
+
+---
+
+## 🧠 Contribuindo / Contributing
+
+Pull requests são bem-vindos! Veja o [guia de contribuição](https://laravel.com/docs/12.x/contributions) oficial.
