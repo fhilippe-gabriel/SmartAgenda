@@ -77,8 +77,8 @@ smartagenda/
 ## 👨‍💻 Desenvolvedor / Developer
 
 **Fhilippe**  
-💼 [GitHub](https://github.com/seu-usuario)  
-📧 [seuemail@example.com](mailto:seuemail@example.com)
+💼 [GitHub](https://github.com/fhilippe-gabriel)  
+📧 [seuemail@example.com](mailto:fhlippedev@gmail.com)
 
 ---
 

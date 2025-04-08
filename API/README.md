@@ -230,8 +230,8 @@ Este projeto está licenciado sob a [MIT license](https://opensource.org/license
 ## 📣 Contato / Contact
 
 Desenvolvido por **Fhilippe**  
-📧 [Seu email ou link](mailto:seuemail@example.com)  
-💼 [LinkedIn ou GitHub](https://github.com/seu-usuario)
+📧 [Seu email ou link](mailto:fhilippedev@gmail.com)  
+💼 [LinkedIn ou GitHub](https://github.com/fhilippe-gabriel)
 
 ---
 
