@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 
 //Public Routes - User
-Route::get('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 //Public Routes - Appointment
@@ -34,4 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/', [AppointmentController::class, 'store']);
     Route::put('/{id}', [AppointmentController::class, 'update']);
     Route::delete('/{id}', [AppointmentController::class, 'destroy']);
+
+    //Private Routes - Search
+    Route::get('/appointments/search', [AppointmentController::class, 'search']);
 });

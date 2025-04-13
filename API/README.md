@@ -73,13 +73,14 @@ Authorization: Bearer {token}
 **Todos os endpoints abaixo exigem autenticação.**  
 All endpoints below require authentication.
 
-| Método | Rota                     | Ação / Action                  |
-| ------ | ------------------------ | ------------------------------ |
-| GET    | `/api/appointments`      | Listar agendamentos do usuário |
-| POST   | `/api/appointments`      | Criar novo agendamento         |
-| GET    | `/api/appointments/{id}` | Ver um agendamento específico  |
-| PUT    | `/api/appointments/{id}` | Atualizar agendamento          |
-| DELETE | `/api/appointments/{id}` | Remover agendamento            |
+| Método | Rota                       | Ação / Action                                |
+| ------ | -------------------------- | -------------------------------------------- |
+| GET    | `/api/appointments`        | Listar agendamentos do usuário               |
+| POST   | `/api/appointments`        | Criar novo agendamento                       |
+| GET    | `/api/appointments/{id}`   | Ver um agendamento específico                |
+| PUT    | `/api/appointments/{id}`   | Atualizar agendamento                        |
+| DELETE | `/api/appointments/{id}`   | Remover agendamento                          |
+| GET    | `/api/appointments/search` | Buscar por cliente, serviço ou por intervalo |
 
 ---
 
@@ -102,7 +103,7 @@ routes/
 
 ---
 
-## 🧪 Testando com Postman / Testing with Postman
+## 🧪 Testando com Insomnia ou Postman / Testing with Insomnia or Postman
 
 1. Faça login com `/api/login`
 2. Copie o token e envie como `Authorization: Bearer {token}`
@@ -134,10 +135,19 @@ routes/
 
 ```json
 {
-    "title": "Live de programação",
-    "description": "Stream na Twitch sobre Laravel + React",
-    "scheduled_to": "2025-04-10 14:00:00"
+    "client_name": "João da Silva",
+    "service": "Corte de cabelo",
+    "scheduled_at": "2025-04-15 10:00:00"
 }
+```
+
+## 🔍 Exemplo de Filtro de Busca (GET /api/appointments/search)
+
+```http
+GET /api/appointments/search?client_name=joao
+GET /api/appointments/search?service=corte
+GET /api/appointments/search?scheduled_at=2025-04-15
+GET /api/appointments/search?start_date=2025-04-01&end_date=2025-04-30
 ```
 
 ---
