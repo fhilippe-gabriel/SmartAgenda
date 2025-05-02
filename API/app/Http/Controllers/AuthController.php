@@ -6,8 +6,46 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+
 class AuthController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/register",
+     *     summary="Registrar um novo usuário",
+     *     description="Registra um novo usuário no sistema.",
+     *     operationId="register",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "email", "password", "password_confirmation"},
+     *             @OA\Property(property="name", type="string", example="João Silva"),
+     *             @OA\Property(property="email", type="string", format="email", example="joao@exemplo.com"),
+     *             @OA\Property(property="password", type="string", example="password123"),
+     *             @OA\Property(property="password_confirmation", type="string", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Usuário registrado com sucesso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User registered successfully"),
+     *             @OA\Property(property="status", type="integer", example=201),
+     *             @OA\Property(property="data", ref="#/components/schemas/User") 
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=409,
+     *         description="Email já está vinculado a um usuário existente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Email já está vinculado a um usuário existente"),
+     *             @OA\Property(property="status", type="integer", example=409)
+     *         )
+     *     )
+     * )
+     */
+
     public function register(Request $request)
     {
         $request->validate([
@@ -42,7 +80,43 @@ class AuthController extends Controller
         //     'message' => 'Voce chegou na rota de registro',
         // ]);
     }
-
+    /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     summary="Realizar login de um usuário",
+     *     description="Autentica um usuário e gera um token de autenticação.",
+     *     operationId="login",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", format="email", example="joao@exemplo.com"),
+     *             @OA\Property(property="password", type="string", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login realizado com sucesso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Login realizado com sucesso"),
+     *             @OA\Property(property="status", type="integer", example=200),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="user", ref="#/components/schemas/User"),
+     *                 @OA\Property(property="token", type="string", example="your_generated_token")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Credenciais inválidas",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Credenciais inválidas"),
+     *             @OA\Property(property="status", type="integer", example=401)
+     *         )
+     *     )
+     * )
+     */
 
     public function login(Request $request)
     {
@@ -77,6 +151,26 @@ class AuthController extends Controller
         ]);
     }
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     summary="Realizar logout de um usuário",
+     *     description="Desloga um usuário e revoga o token de autenticação.",
+     *     operationId="logout",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Usuário deslogado com sucesso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User logged out successfully"),
+     *             @OA\Property(property="status", type="integer", example=200),
+     *             @OA\Property(property="user", ref="#/components/schemas/User")
+     *         )
+     *     )
+     * )
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -87,6 +181,25 @@ class AuthController extends Controller
             'status' => 200,
         ]);
     }
+    /**
+     * @OA\Get(
+     *     path="/api/me",
+     *     summary="Retornar dados do usuário logado",
+     *     description="Retorna os dados do usuário autenticado.",
+     *     operationId="me",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Dados do usuário logado",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Data of user logged in"),
+     *             @OA\Property(property="status", type="integer", example=200),
+     *             @OA\Property(property="data", ref="#/components/schemas/User")
+     *         )
+     *     )
+     * )
+     */
     public function me(Request $request)
     {
         return response()->json([

@@ -15,7 +15,7 @@
         }
     ],
     "paths": {
-        "/api/appointments": {
+        "/api/": {
             "get": {
                 "tags": [
                     "Appointments"
@@ -195,7 +195,7 @@
                 ]
             }
         },
-        "/api/appointments/{id}": {
+        "/api/{id}": {
             "get": {
                 "tags": [
                     "Appointments"

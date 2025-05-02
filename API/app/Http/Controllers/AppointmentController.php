@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
+
 /**
  * @OA\Tag(
  *     name="Appointments",
@@ -17,7 +18,7 @@ class AppointmentController extends Controller
      * Display a listing of the resource.
      * 
      * @OA\Get(
-     *     path="/api/appointments",
+     *     path="/api/",
      *     operationId="getAppointmentsList",
      *     tags={"Appointments"},
      *     summary="Get list of appointments",
@@ -56,7 +57,8 @@ class AppointmentController extends Controller
 
     // Return the list of appointments
     {
-        $appointment = Appointment::where('user_id', auth()->id())->get();
+        // $appointment = Appointment::where('user_id', auth()->id())->get();
+        $appointments = Appointment::where('user_id', auth()->id())->paginate(10);
 
         return ([
             'message' => 'List of appointments',
@@ -69,7 +71,7 @@ class AppointmentController extends Controller
      * Store a newly created resource in storage.
      * 
      * @OA\Post(
-     *     path="/api/appointments",
+     *     path="/api/",
      *     operationId="storeAppointment",
      *     tags={"Appointments"},
      *     summary="Store new appointment",
@@ -120,24 +122,38 @@ class AppointmentController extends Controller
             ]
         );
 
-        // Cria um agendamento vinculado ao usuário autenticado
+        // // Cria um agendamento vinculado ao usuário autenticado
+        // $appointment = $request->user()->appointments()->create($data);
+
+        // // Retorna o agendamento criado
+        // return response()->json(
+        //     [
+        //         'message' => 'Appointment created successfully',
+        //         'status' => 201,
+        //         'data' => $appointment,
+        //     ]
+        // );
         $appointment = $request->user()->appointments()->create($data);
 
-        // Retorna o agendamento criado
-        return response()->json(
-            [
+        if ($appointment) {
+            return response()->json([
                 'message' => 'Appointment created successfully',
                 'status' => 201,
                 'data' => $appointment,
-            ]
-        );
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Failed to create appointment',
+                'status' => 500,
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      * 
      * @OA\Get(
-     *     path="/api/appointments/{id}",
+     *     path="/api/{id}",
      *     operationId="getAppointmentById",
      *     tags={"Appointments"},
      *     summary="Get appointment information",
@@ -178,20 +194,17 @@ class AppointmentController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function show(string $id, Appointment $appointment)
+    public function show(string $id)
     {
         $appointment = Appointment::findOrFail($id);
 
-        // Return the appointment details
-
-        return response()->json(
-            [
-                'message' => 'Appointment details',
-                'status' => 200,
-                'data' => $appointment,
-            ]
-        );
+        return response()->json([
+            'message' => 'Appointment details',
+            'status' => 200,
+            'data' => $appointment,
+        ]);
     }
+
 
     /**
      * Search for appointments with filters
@@ -319,7 +332,7 @@ class AppointmentController extends Controller
      * Update the specified resource in storage.
      * 
      * @OA\Put(
-     *     path="/api/appointments/{id}",
+     *     path="/api/{id}",
      *     operationId="updateAppointment",
      *     tags={"Appointments"},
      *     summary="Update existing appointment",
@@ -367,40 +380,38 @@ class AppointmentController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function update(Request $request, $id, Appointment $appointment)
-
-
+    public function update(Request $request, $id)
     {
         $agendamento = Appointment::where('user_id', auth()->id())->find($id);
 
-
-
-        if (! $agendamento) {
+        if (!$agendamento) {
             return response()->json([
-                'message' => 'Agendamento não encontrado.',
+                'message' => 'Appointment not found.',
                 'status' => 404,
-            ]);
+            ], 404);
         }
 
-        // Validate the request data
-        $data = $request->validate(
-            [
-                'client_name' => 'required|string',
-                'service' => 'required|string',
-                'scheduled_at' => 'required|date',
-            ]
-        );
+        $data = $request->validate([
+            'client_name' => 'required|string',
+            'service' => 'required|string',
+            'scheduled_at' => 'required|date',
+        ]);
 
-        $appointment->update($data);
+        $agendamento->update($data);
 
-        return $appointment;
+        return response()->json([
+            'message' => 'Appointment updated successfully',
+            'status' => 200,
+            'data' => $agendamento,
+        ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
      * 
      * @OA\Delete(
-     *     path="/api/appointments/{id}",
+     *     path="/api/{id}",
      *     operationId="deleteAppointment",
      *     tags={"Appointments"},
      *     summary="Delete existing appointment",
@@ -439,17 +450,17 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::where('user_id', auth()->id())->find($id);
 
-        if (! $appointment) {
+        if (!$appointment) {
             return response()->json([
-                'message' => 'Agendamento não encontrado.',
+                'message' => 'Appointment not found.',
                 'status' => 404,
-            ]);
+            ], 404);
         }
 
         $appointment->delete();
 
         return response()->json([
-            'message' => 'Agendamento excluído com sucesso.',
+            'message' => 'Appointment deleted successfully',
             'status' => 200,
         ]);
     }
