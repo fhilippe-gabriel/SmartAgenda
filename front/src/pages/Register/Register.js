@@ -22,7 +22,11 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("api/register", formData);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/register",
+        formData
+      );
+      // await axios.post("/register", formData);
       setMessage("Usuário registrado com sucesso!");
       console.log("Resposta da API:", response.data);
     } catch (error) {
@@ -136,7 +140,7 @@ const Register = () => {
               </div>
               <div className="mt-2">
                 <input
-                  id="password"
+                  id="password_confirmation"
                   name="password_confirmation"
                   type="password"
                   value={formData.password_confirmation}
